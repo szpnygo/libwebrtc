@@ -1,0 +1,7 @@
+tools/gclient
+tools/gn
+tools/ninja
+webrtc
+build
+.vscode
+.cache

@@ -1,6 +1,8 @@
 tools/gclient
 tools/gn
 tools/ninja
+tools/linux/gn
+tools/linux/ninja
 webrtc
 build
 .vscode

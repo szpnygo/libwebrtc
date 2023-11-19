@@ -5,3 +5,6 @@ webrtc
 build
 .vscode
 .cache
+libwebrtc.dylib
+libwebrtc.dll
+libwebrtc.dll.lib

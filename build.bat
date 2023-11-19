@@ -28,4 +28,6 @@ gn gen "out/win-%ARCH%" --args="target_os=\"win\" target_cpu=\"%ARCH%\" is_debug
 ninja -C "out/win-%ARCH%"
 
 cd "%ROOT%"
+if not exist "libs\win_%ARCH%" mkdir "libs\win_%ARCH%"
 copy /Y "webrtc\src\out\win-%ARCH%\libwebrtc.dll" "libs\win_%ARCH%\libwebrtc.dll"
+copy /Y "webrtc\src\out\win-%ARCH%\libwebrtc.dll.lib" "libs\win_%ARCH%\libwebrtc.dll.lib"

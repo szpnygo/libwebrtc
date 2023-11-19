@@ -1,6 +1,7 @@
 #include "rtc_video_device_impl.h"
 
 #include "modules/video_capture/video_capture_factory.h"
+#include "src/internal/video_capturer.h"
 
 namespace libwebrtc {
 
@@ -49,6 +50,16 @@ scoped_refptr<RTCVideoCapturer> RTCVideoDeviceImpl::Create(const char* name,
   return signaling_thread_->BlockingCall([vcm] {
     return scoped_refptr<RTCVideoCapturerImpl>(
         new RefCountedObject<RTCVideoCapturerImpl>(vcm));
+  });
+}
+
+scoped_refptr<RTCVideoCapturer> RTCVideoDeviceImpl::CreateCapturer() {
+  std::shared_ptr<webrtc::internal::VideoCapturer> capturer(
+      std::make_shared<webrtc::internal::VideoCapturer>());
+
+  return signaling_thread_->BlockingCall([capturer] {
+    return scoped_refptr<RTCVideoCapturerImpl>(
+        new RefCountedObject<RTCVideoCapturerImpl>(capturer));
   });
 }
 

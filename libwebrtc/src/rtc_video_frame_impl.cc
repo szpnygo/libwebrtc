@@ -1,8 +1,10 @@
 #include "rtc_video_frame_impl.h"
 
 #include "api/video/i420_buffer.h"
+#include "libyuv/convert.h"
 #include "libyuv/convert_argb.h"
 #include "libyuv/convert_from.h"
+#include "libyuv/convert_from_argb.h"
 #include "rtc_base/checks.h"
 #include "rtc_base/logging.h"
 
@@ -145,6 +147,69 @@ scoped_refptr<RTCVideoFrame> RTCVideoFrame::Create(
   scoped_refptr<VideoFrameBufferImpl> frame =
       scoped_refptr<VideoFrameBufferImpl>(
           new RefCountedObject<VideoFrameBufferImpl>(i420_buffer));
+  return frame;
+}
+
+scoped_refptr<RTCVideoFrame> RTCVideoFrame::Create(Type type, int width,
+                                                   int height,
+                                                   const uint8_t* buffer,
+                                                   int length, int stride) {
+  int pixelBit = 4;
+  if (type == Type::kRGB24) {
+    pixelBit = 3;
+  }
+
+  RTC_DCHECK(length == (width * height * pixelBit));
+
+  rtc::scoped_refptr<webrtc::I420Buffer> i420_buffer =
+      webrtc::I420Buffer::Create(width, height);
+
+  // 创建空的Y、U、V通道
+  std::unique_ptr<uint8_t[]> y_plane(new uint8_t[width * height]);
+  std::unique_ptr<uint8_t[]> u_plane(
+      new uint8_t[(width + 1) / 2 * (height + 1) / 2]);
+  std::unique_ptr<uint8_t[]> v_plane(
+      new uint8_t[(width + 1) / 2 * (height + 1) / 2]);
+
+  switch (type) {
+    case libwebrtc::RTCVideoFrame::Type::kARGB:
+      libyuv::ARGBToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
+                         (width + 1) / 2, v_plane.get(), (width + 1) / 2, width,
+                         height);
+      break;
+    case libwebrtc::RTCVideoFrame::Type::kBGRA:
+      libyuv::BGRAToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
+                         (width + 1) / 2, v_plane.get(), (width + 1) / 2, width,
+                         height);
+      break;
+    case libwebrtc::RTCVideoFrame::Type::kABGR:
+      libyuv::ABGRToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
+                         (width + 1) / 2, v_plane.get(), (width + 1) / 2, width,
+                         height);
+      break;
+    case libwebrtc::RTCVideoFrame::Type::kRGBA:
+      libyuv::RGBAToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
+                         (width + 1) / 2, v_plane.get(), (width + 1) / 2, width,
+                         height);
+      break;
+    case libwebrtc::RTCVideoFrame::Type::kRGB24:
+      libyuv::RGB24ToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
+                          (width + 1) / 2, v_plane.get(), (width + 1) / 2,
+                          width, height);
+      break;
+    default:
+      break;
+  }
+
+  auto newBuffer =
+      i420_buffer->Copy(width, height, y_plane.get(), width, u_plane.get(),
+                        (width + 1) / 2, v_plane.get(), (width + 1) / 2);
+
+  // 创建RTCVideoFrame对象
+  scoped_refptr<VideoFrameBufferImpl> frame =
+      scoped_refptr<VideoFrameBufferImpl>(
+          new RefCountedObject<VideoFrameBufferImpl>(newBuffer));
+
   return frame;
 }
 

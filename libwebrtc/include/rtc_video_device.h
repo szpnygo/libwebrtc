@@ -2,6 +2,7 @@
 #define LIB_WEBRTC_RTC_VIDEO_DEVICE_HXX
 
 #include "rtc_types.h"
+#include "rtc_video_frame.h"
 
 namespace libwebrtc {
 
@@ -14,6 +15,8 @@ class RTCVideoCapturer : public RefCountInterface {
   virtual bool CaptureStarted() = 0;
 
   virtual void StopCapture() = 0;
+
+  virtual void GenerateFrame(scoped_refptr<RTCVideoFrame> frame) = 0;
 };
 
 class RTCVideoDevice : public RefCountInterface {
@@ -31,6 +34,8 @@ class RTCVideoDevice : public RefCountInterface {
                                                  uint32_t index, size_t width,
                                                  size_t height,
                                                  size_t target_fps) = 0;
+
+  virtual scoped_refptr<RTCVideoCapturer> CreateCapturer() = 0;
 
  protected:
   virtual ~RTCVideoDevice() {}

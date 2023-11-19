@@ -6,6 +6,7 @@
 #include "modules/video_capture/video_capture.h"
 #include "rtc_base/thread.h"
 #include "rtc_video_device.h"
+#include "rtc_video_frame_impl.h"
 #include "src/internal/vcm_capturer.h"
 #include "src/internal/video_capturer.h"
 
@@ -32,6 +33,22 @@ class RTCVideoCapturerImpl : public RTCVideoCapturer {
     if (video_capturer_ != nullptr) video_capturer_->StopCapture();
   }
 
+  void GenerateFrame(scoped_refptr<RTCVideoFrame> frame) override {
+    if (video_capturer_ != nullptr) {
+      VideoFrameBufferImpl* impl =
+          static_cast<VideoFrameBufferImpl*>(frame.get());
+
+      auto newFrame = webrtc::VideoFrame::Builder()
+                          .set_video_frame_buffer(impl->buffer())
+                          .set_rotation(static_cast<webrtc::VideoRotation>(
+                              impl->rotation()))
+                          .set_timestamp_us(rtc::TimeMicros())
+                          .build();
+
+      video_capturer_->GenerateFrame(newFrame);
+    }
+  }
+
  private:
   std::shared_ptr<webrtc::internal::VideoCapturer> video_capturer_;
 };
@@ -52,6 +69,8 @@ class RTCVideoDeviceImpl : public RTCVideoDevice {
   scoped_refptr<RTCVideoCapturer> Create(const char* name, uint32_t index,
                                          size_t width, size_t height,
                                          size_t target_fps) override;
+
+  scoped_refptr<RTCVideoCapturer> CreateCapturer() override;
 
  private:
   std::unique_ptr<webrtc::VideoCaptureModule::DeviceInfo> device_info_;

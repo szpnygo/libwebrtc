@@ -7,7 +7,7 @@ namespace libwebrtc {
 
 class RTCVideoFrame : public RefCountInterface {
  public:
-  enum class Type { kARGB, kBGRA, kABGR, kRGBA };
+  enum class Type { kARGB, kBGRA, kABGR, kRGBA, kRGB24 };
 
   enum VideoRotation {
     kVideoRotation_0 = 0,
@@ -19,6 +19,10 @@ class RTCVideoFrame : public RefCountInterface {
  public:
   LIB_WEBRTC_API static scoped_refptr<RTCVideoFrame> Create(
       int width, int height, const uint8_t* buffer, int length);
+
+  LIB_WEBRTC_API static scoped_refptr<RTCVideoFrame> Create(
+      Type type, int width, int height, const uint8_t* buffer, int length,
+      int stride);
 
   LIB_WEBRTC_API static scoped_refptr<RTCVideoFrame> Create(
       int width, int height, const uint8_t* data_y, int stride_y,

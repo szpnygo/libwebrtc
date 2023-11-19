@@ -1,0 +1,1 @@
+set(olivec ${CMAKE_SOURCE_DIR}/third_party/olivec PARENT_SCOPE)

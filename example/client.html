@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+
+<head>
+    <title>WebRTC Example</title>
+    <style>
+        video {
+            background: #222;
+            margin: 0 0 20px 0;
+            --width: 100%;
+            width: var(--width);
+            height: calc(var(--width) * 0.75);
+        }
+    </style>
+</head>
+
+<body>
+    <button id="connectBtn">链接example</button>
+
+    <br />
+    <span>服务器消息：</span>
+    <span id="serverStatus"></span>
+
+    <br />
+    <span>链接消息：</span>
+    <span id="clientStatus"></span>
+
+    <video id="remoteVideo" autoplay playsinline muted></video>
+</body>
+
+<script>
+    const remoteVideo = document.querySelector("#remoteVideo");
+    const connectBtn = document.querySelector("#connectBtn");
+    const serverStatus = document.querySelector("#serverStatus");
+    const clientStatus = document.querySelector("#clientStatus");
+
+    serverStatus.innerHTML = "尚未开始连接";
+    clientStatus.innerHTML = "尚未开始连接";
+
+    connectBtn.addEventListener("click", () => {
+        connectRoom();
+    });
+
+    var serverConnected = false;
+
+    // 创建ws连接服务器
+    const ws = new WebSocket("wss://signal.webrtc.tcode.ltd/base?auth=gowebrtc-signal");
+    ws.onopen = function () {
+        console.log("ws onopen");
+        serverConnected = true;
+        serverStatus.innerHTML = "服务器已连接";
+
+        //绑定用户
+        ws.send(JSON.stringify({
+            action: "BindUser",
+            name: "client",
+        }));
+    };
+    ws.onmessage = function (e) {
+        e.data.text().then(t => onMessage(JSON.parse(t)));
+    };
+
+    function sendMessage(data) {
+        console.log("send", data);
+        ws.send(JSON.stringify(data));
+    }
+
+    async function onMessage(data) {
+        if (data.action == "Ping") {
+            return
+        }
+        if (data.action == "BindSuccess") {
+            serverStatus.innerHTML = "服务器已连接，用户已绑定";
+        }
+        if (data.action == "BindFail") {
+            serverStatus.innerHTML = "服务器已连接，用户绑定失败";
+        }
+        console.log("get", data);
+
+        const functionName = data.action; // 获取要调用的函数名称
+        if (typeof window[functionName] === 'function') {
+            await window[functionName](data);
+        }
+    }
+
+    async function connectRoom() {
+        if (!serverConnected) {
+            alert("服务器未连接");
+            return;
+        }
+
+        const connectMessage = {
+            action: "go",
+        };
+
+        const message = {
+            action: "OutgoingMessage",
+            recipient: "example",
+            content: JSON.stringify(connectMessage),
+        };
+
+        sendMessage(message);
+    }
+
+    var pc = null;
+
+    async function IncomingMessage(data) {
+        const message = JSON.parse(data.content);
+        console.log("IncomingMessage", message);
+        if (message.action == "offer") {
+            if (pc == null) {
+                pc = new RTCPeerConnection({
+                    iceServers: [
+                        { urls: "stun:coturn.tcodestudio.com:31000" },
+                    ],
+                });
+            }
+            pc.onconnectionstatechange = function (e) {
+                clientStatus.innerHTML = e.target.connectionState;
+            };
+            pc.ontrack = (e) => {
+                console.log("ontrack", e);
+                const remoteVideo = document.querySelector("#remoteVideo");
+                remoteVideo.srcObject = e.streams[0];
+            };
+            pc.onicecandidate = (e) => {
+                if (e.candidate) {
+                    const sendResponse = {
+                        action: "OutgoingMessage",
+                        recipient: "example",
+                        content: JSON.stringify({
+                            "action": "candidate",
+                            "sdpMid": e.candidate.sdpMid,
+                            "candidate": e.candidate.candidate,
+                            "sdpMLineIndex": e.candidate.sdpMLineIndex,
+                        }),
+                    };
+
+                    sendMessage(sendResponse);
+                }
+            };
+
+            console.log("setRemoteDescription");
+            //如果是offer，设置远端描述
+            pc.setRemoteDescription(message);
+            //创建应答
+            console.log("createAnswer");
+            var answer = await pc.createAnswer()
+
+            //设置本地描述
+            console.log("setLocalDescription");
+            await pc.setLocalDescription(answer);
+
+            //发送应答
+            const responseMessage = {
+                action: "OutgoingMessage",
+                recipient: "example",
+                content: JSON.stringify({
+                    "action": "answer",
+                    "sdp": answer.sdp,
+                    "type": answer.type,
+                }),
+            };
+
+            sendMessage(responseMessage);
+        }
+
+        if (message.action == "candidate") {
+            pc.addIceCandidate(message);
+        }
+    }
+
+</script>
+
+</html>

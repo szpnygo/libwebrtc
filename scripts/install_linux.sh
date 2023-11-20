@@ -4,10 +4,9 @@ export HTTPS_PROXY="http://192.168.3.157:7890"
 export HTTP_PROXY="http://192.168.3.157:7890"
 export NO_AUTH_BOTO_CONFIG="$PWD/linux/.boto"
 # Set the current directory to the script's directory
-cd "$(dirname "$0")"
 ROOT="$PWD"
-GFILE="$PWD/linux/.gclient"
-NO_AUTH_BOTO_CONFIG="$PWD/linux/.boto"
+GFILE="$PWD/tools/config/linux/.gclient"
+NO_AUTH_BOTO_CONFIG="$PWD/tools/config/linux/.boto"
 DEPOT_TOOLS_WIN_TOOLCHAIN=0
 
 # Check if the directory 'tools/gclient' exists

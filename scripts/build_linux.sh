@@ -4,7 +4,7 @@ export PATH=`pwd`/tools/linux/gn:"$PATH"
 export PATH=`pwd`/tools/linux/ninja:"$PATH"
 export PATH="$PWD/tools/gclient:$PATH"
 
-GFILE=$(pwd)/linux/.gclient
+GFILE=$(pwd)/tools/config/linux/.gclient
 ROOT=$(pwd)
 LIBWEBRTC=$(pwd)/libwebrtc
 GNFILE=$(pwd)/BUILD.gn

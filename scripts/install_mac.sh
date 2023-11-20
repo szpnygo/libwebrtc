@@ -1,11 +1,9 @@
 #!/bin/bash
 
 export NO_AUTH_BOTO_CONFIG="$PWD/mac/.boto"
-# Set the current directory to the script's directory
-cd "$(dirname "$0")"
 ROOT="$PWD"
-GFILE="$PWD/mac/.gclient"
-NO_AUTH_BOTO_CONFIG="$PWD/mac/.boto"
+GFILE="$PWD/tools/config/mac/.gclient"
+NO_AUTH_BOTO_CONFIG="$PWD/tools/config/mac/.boto"
 DEPOT_TOOLS_WIN_TOOLCHAIN=0
 
 # Check if the directory 'tools/gclient' exists

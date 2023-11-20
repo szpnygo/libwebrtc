@@ -1,9 +1,8 @@
 @echo off
 setlocal
-cd /d %~dp0
 set "ROOT=%CD%"
-set "GFILE=%CD%\.gclient"
-set "NO_AUTH_BOTO_CONFIG=%CD%\.boto"
+set "GFILE=%CD%\tools\config\win.gclient"
+set "NO_AUTH_BOTO_CONFIG=%CD%\tools\config\win\.boto"
 set "DEPOT_TOOLS_WIN_TOOLCHAIN=0"
 
 REM Check if the directory 'tools\gclient' exists

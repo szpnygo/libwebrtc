@@ -4,7 +4,7 @@ export PATH=`pwd`/tools/mac/gn:"$PATH"
 export PATH=`pwd`/tools/mac/ninja:"$PATH"
 export PATH="$PWD/tools/gclient:$PATH"
 
-GFILE=$(pwd)/mac/.gclient
+GFILE=$(pwd)/tools/config/mac/.gclient
 ROOT=$(pwd)
 LIBWEBRTC=$(pwd)/libwebrtc
 GNFILE=$(pwd)/BUILD.gn

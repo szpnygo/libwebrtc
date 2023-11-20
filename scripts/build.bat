@@ -1,10 +1,9 @@
 @echo on
 setlocal
-cd /d %~dp0
 set "PATH=%CD%\tools\gclient;%PATH%"
 set "PATH=%CD%\tools\gn;%PATH%"
 set "PATH=%CD%\tools\ninja;%PATH%"
-set "GFILE=%CD%\.gclient"
+set "GFILE=%CD%\tools\config\win.gclient"
 set "ROOT=%CD%"
 set "LIBWEBRTC=%CD%\libwebrtc"
 set "GNFILE=%CD%\BUILD.gn"

@@ -12,6 +12,11 @@ if(APPLE)
     set(LIBWEBRTC_NAME "webrtc")
 endif()
 
+if(LINUX)
+    set(LIBWEBRTC_DIR "linux_x64")
+    set(LIBWEBRTC_NAME "webrtc")
+endif()
+
 if(LIBWEBRTC_DIR)
     find_library(
         LIBWEBRTC
@@ -24,6 +29,9 @@ set(LIBWEBRTC_DLL ${LIBWEBRTC})
 
 if(WIN32)
     set(LIBWEBRTC_DLL ${CMAKE_SOURCE_DIR}/libs/${LIBWEBRTC_DIR}/libwebrtc.dll)
+endif()
+if(LINUX)
+    set(LIBWEBRTC_DLL ${CMAKE_SOURCE_DIR}/libs/${LIBWEBRTC_DIR}/libwebrtc.so)
 endif()
 
 message(STATUS "Find libwebrtc: ${LIBWEBRTC}  ${LIBWEBRTC_DLL}")

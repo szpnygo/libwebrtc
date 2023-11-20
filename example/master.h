@@ -1,13 +1,11 @@
 #pragma once
 #include "client.h"
 #include "connection.h"
-#include "uuid.h"
 #include "webrtc_app.h"
 #include <iostream>
 #include <memory>
 #include <mutex>
 #include <nlohmann/json.hpp>
-#include <winspool.h>
 
 using namespace libwebrtc;
 using json = nlohmann::json;

@@ -345,7 +345,6 @@ _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE6appendEPKc@GLIBCXX_3.4.21 
 isspace@GLIBC_2.2.5 U
 XQueryKeymap U
 strcpy@GLIBC_2.2.5 U
-cosf@GLIBC_2.2.5 U
 sinf@GLIBC_2.2.5 U
 ceilf@GLIBC_2.2.5 U
 cos@GLIBC_2.2.5 U
@@ -354,7 +353,6 @@ ceil@GLIBC_2.2.5 U
 expf@GLIBC_2.2.5 U
 exp2f@GLIBC_2.2.5 U
 lrint@GLIBC_2.2.5 U
-tanhf@GLIBC_2.2.5 U
 _ZNSt8__detail15_List_node_base4swapERS0_S1_@GLIBCXX_3.4.15 U
 _ZNSt8__detail15_List_node_base11_M_transferEPS0_S1_@GLIBCXX_3.4.15 U
 _ZSt18_Rb_tree_decrementPKSt18_Rb_tree_node_base@GLIBCXX_3.4 U

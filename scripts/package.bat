@@ -1,40 +1,60 @@
 @echo off
 setlocal
 
-REM 函数：打包库
-:package
-set os=%1
-set libfile=%2
-set extrafile=%3
-
-REM 创建临时目录
-set tmp_dir=tmp_%os%
-md %tmp_dir%\lib
-md %tmp_dir%\include
-
-REM 复制文件
-xcopy /E /I libwebrtc\include\* %tmp_dir%\include\
-copy LICENSE %tmp_dir%\
-copy %libfile% %tmp_dir%\lib\
-if not "%extrafile%" == "" copy %extrafile% %tmp_dir%\lib\
-
-REM 打包
-powershell Compress-Archive -Path %tmp_dir%\* -DestinationPath libwebrtc-%os%.zip
-
-REM 清理
-rd /s /q %tmp_dir%
-
-REM 跳转回调用点
-goto :eof
+set "ROOT=%CD%"
 
 REM 为Linux x64打包
-call :package linux-x64 libs\linux_x64\libwebrtc.so libs\linux_x64\libwebrtc.so.TOC
+set os=linux-x64
+set libpath=libs\linux_x64\libwebrtc.so
+set extrapath=libs\linux_x64\libwebrtc.so.TOC
+
+set tmp_dir=%ROOT%\tmp_%os%
+if not exist "%tmp_dir%" md "%tmp_dir%"
+md "%tmp_dir%\lib"
+md "%tmp_dir%\include"
+
+xcopy /E /I "%ROOT%\libwebrtc\include\" "%tmp_dir%\include\"
+copy "%ROOT%\LICENSE" "%tmp_dir%\"
+copy "%ROOT%\%libpath%" "%tmp_dir%\lib\"
+if not "%extrapath%"=="" copy "%ROOT%\%extrapath%" "%tmp_dir%\lib\"
+
+powershell Compress-Archive -Path "%tmp_dir%\*" -DestinationPath "%ROOT%\libwebrtc-%os%.zip"
+rd /s /q "%tmp_dir%"
 
 REM 为Mac x64打包
-call :package mac-x64 libs\mac_x64\libwebrtc.dylib
+set os=mac-x64
+set libpath=libs\mac_x64\libwebrtc.dylib
+set extrapath=
+
+set tmp_dir=%ROOT%\tmp_%os%
+if not exist "%tmp_dir%" md "%tmp_dir%"
+md "%tmp_dir%\lib"
+md "%tmp_dir%\include"
+
+xcopy /E /I "%ROOT%\libwebrtc\include\" "%tmp_dir%\include\"
+copy "%ROOT%\LICENSE" "%tmp_dir%\"
+copy "%ROOT%\%libpath%" "%tmp_dir%\lib\"
+
+powershell Compress-Archive -Path "%tmp_dir%\*" -DestinationPath "%ROOT%\libwebrtc-%os%.zip"
+rd /s /q "%tmp_dir%"
 
 REM 为Windows x64打包
-call :package win-x64 libs\win_x64\libwebrtc.dll libs\win_x64\libwebrtc.dll.lib
+set os=win-x64
+set libpath=libs\win_x64\libwebrtc.dll
+set extrapath=libs\win_x64\libwebrtc.dll.lib
+
+set tmp_dir=%ROOT%\tmp_%os%
+if not exist "%tmp_dir%" md "%tmp_dir%"
+md "%tmp_dir%\lib"
+md "%tmp_dir%\include"
+
+xcopy /E /I "%ROOT%\libwebrtc\include\" "%tmp_dir%\include\"
+copy "%ROOT%\LICENSE" "%tmp_dir%\"
+copy "%ROOT%\%libpath%" "%tmp_dir%\lib\"
+if not "%extrapath%"=="" copy "%ROOT%\%extrapath%" "%tmp_dir%\lib\"
+
+powershell Compress-Archive -Path "%tmp_dir%\*" -DestinationPath "%ROOT%\libwebrtc-%os%.zip"
+rd /s /q "%tmp_dir%"
 
 echo 打包完成
 endlocal

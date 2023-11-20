@@ -33,5 +33,8 @@ endif()
 if(LINUX)
     set(LIBWEBRTC_DLL ${CMAKE_SOURCE_DIR}/libs/${LIBWEBRTC_DIR}/libwebrtc.so)
 endif()
+if(APPLE)
+    set(LIBWEBRTC_DLL ${CMAKE_SOURCE_DIR}/libs/${LIBWEBRTC_DIR}/libwebrtc.dylib)
+endif()
 
 message(STATUS "Find libwebrtc: ${LIBWEBRTC}  ${LIBWEBRTC_DLL}")

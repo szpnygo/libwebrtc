@@ -3,6 +3,8 @@ tools/gn
 tools/ninja
 tools/linux/gn
 tools/linux/ninja
+tools/mac/gn
+tools/mac/ninja
 webrtc
 build
 dockerbuild

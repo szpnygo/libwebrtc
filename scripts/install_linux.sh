@@ -1,7 +1,6 @@
 #!/bin/bash
+WEBRTC_SRC=webrtc_linux
 
-export HTTPS_PROXY="http://192.168.3.157:7890"
-export HTTP_PROXY="http://192.168.3.157:7890"
 export NO_AUTH_BOTO_CONFIG="$PWD/linux/.boto"
 # Set the current directory to the script's directory
 ROOT="$PWD"
@@ -43,12 +42,12 @@ export PATH="$PWD/tools/gclient:$PATH"
 command -v gclient >/dev/null || { echo "I require gclient but it's not installed. Aborting."; exit 1; }
 
 # Check if the 'webrtc' directory exists
-if [ ! -d "webrtc" ]; then
+if [ ! -d "$WEBRTC_SRC" ]; then
     # If not, create it
-    mkdir "webrtc"
+    mkdir "$WEBRTC_SRC"
 fi
 
 # Copy the .gclient file
-cp -f "$GFILE" "webrtc/.gclient"
-cd webrtc
+cp -f "$GFILE" "$WEBRTC_SRC/.gclient"
+cd $WEBRTC_SRC
 gclient sync --no-history

@@ -6,6 +6,8 @@ tools/linux/ninja
 tools/mac/gn
 tools/mac/ninja
 webrtc
+webrtc_linux
+webrtc_mac
 build
 dockerbuild
 .vscode

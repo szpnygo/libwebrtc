@@ -25,6 +25,10 @@ RUN apt-get install -y software-properties-common && \
     apt-get update && \
     apt-get install -y clang
 
+RUN apt-get install -y \
+    curl \
+    unzip
+
 RUN rm -rf /var/lib/apt/lists/*
 
 ENV CC=/usr/bin/clang

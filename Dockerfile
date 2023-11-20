@@ -1,8 +1,9 @@
 FROM ubuntu:latest
 
 # install build tools
-RUN apt-get update && \
-    apt-get install -y \
+RUN apt-get update
+
+RUN apt-get install -y \
     wget \
     ninja-build \
     git \
@@ -15,7 +16,9 @@ RUN apt-get update && \
     pulseaudio
 
 RUN apt-get install -y \
-    gnupg
+    gnupg \
+    curl \
+    zip
     
 # install clang
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
@@ -25,11 +28,7 @@ RUN apt-get install -y software-properties-common && \
     apt-get update && \
     apt-get install -y clang
 
-RUN apt-get install -y \
-    curl \
-    unzip
-
-RUN rm -rf /var/lib/apt/lists/*
+# RUN rm -rf /var/lib/apt/lists/*
 
 ENV CC=/usr/bin/clang
 ENV CXX=/usr/bin/clang++

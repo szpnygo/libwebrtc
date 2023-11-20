@@ -8,17 +8,18 @@ RUN apt-get install -y \
     ninja-build \
     git \
     libssl-dev \ 
+    gnupg \
+    curl \
+    zip
+
+RUN apt-get install -y \
     zlib1g-dev \
     libxcomposite1 \
     libxdamage1 \
     libxrandr2 \
     libgbm1 \
-    pulseaudio
-
-RUN apt-get install -y \
-    gnupg \
-    curl \
-    zip
+    pulseaudio \
+    libxfixes-dev
     
 # install clang
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
@@ -26,7 +27,9 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN apt-get install -y software-properties-common && \
     add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal main" && \
     apt-get update && \
-    apt-get install -y clang
+    apt-get install -y clang-18 \
+    libc++-18-dev \
+    libc++abi-18-dev
 
 # RUN rm -rf /var/lib/apt/lists/*
 

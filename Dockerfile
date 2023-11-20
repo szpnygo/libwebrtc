@@ -33,6 +33,10 @@ RUN apt-get install -y software-properties-common && \
 
 # RUN rm -rf /var/lib/apt/lists/*
 
+RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100
+RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 100
+
+
 ENV CC=/usr/bin/clang
 ENV CXX=/usr/bin/clang++
 

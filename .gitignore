@@ -14,3 +14,4 @@ dockerbuild
 /libwebrtc.dll
 /libwebrtc.dll.lib
 /libwebrtc.so
+libwebrtc-*.zip

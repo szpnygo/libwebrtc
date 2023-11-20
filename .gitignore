@@ -10,3 +10,4 @@ build
 /libwebrtc.dylib
 /libwebrtc.dll
 /libwebrtc.dll.lib
+/libwebrtc.so

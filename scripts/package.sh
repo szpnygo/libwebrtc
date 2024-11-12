@@ -32,6 +32,8 @@ package "linux-x64" "libs/linux_x64/libwebrtc.so" "libs/linux_x64/libwebrtc.so.T
 # 为Mac x64打包
 package "mac-x64" "libs/mac_x64/libwebrtc.dylib" ""
 
+package "mac-arm64" "libs/mac_arm64/libwebrtc.dylib" ""
+
 # 为Windows x64打包
 package "win-x64" "libs/win_x64/libwebrtc.dll" "libs/win_x64/libwebrtc.dll.lib"
 

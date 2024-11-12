@@ -55,7 +55,7 @@ class RTCVideoCapturerImpl : public RTCVideoCapturer {
 
 class RTCVideoDeviceImpl : public RTCVideoDevice {
  public:
-  RTCVideoDeviceImpl(rtc::Thread* signaling_thread, rtc::Thread* worker_thread);
+  RTCVideoDeviceImpl(rtc::Thread* worker_thread);
 
  public:
   uint32_t NumberOfDevices() override;
@@ -69,12 +69,11 @@ class RTCVideoDeviceImpl : public RTCVideoDevice {
   scoped_refptr<RTCVideoCapturer> Create(const char* name, uint32_t index,
                                          size_t width, size_t height,
                                          size_t target_fps) override;
-
+  
   scoped_refptr<RTCVideoCapturer> CreateCapturer() override;
 
  private:
   std::unique_ptr<webrtc::VideoCaptureModule::DeviceInfo> device_info_;
-  rtc::Thread* signaling_thread_ = nullptr;
   rtc::Thread* worker_thread_ = nullptr;
 };
 

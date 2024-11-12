@@ -30,7 +30,7 @@ if [ ! -f "tools/mac/gn/gn" ]; then
     # If not, create it
     mkdir -p "tools/mac/gn"
     # Download the gn binary into it
-    curl -L -o "tools/mac/gn-mac.zip" "https://chrome-infra-packages.appspot.com/dl/gn/gn/mac-amd64/+/latest"
+    curl -L -o "tools/mac/gn-mac.zip" "https://chrome-infra-packages.appspot.com/dl/gn/gn/mac-arm64/+/latest"
     unzip "tools/mac/gn-mac.zip" -d "tools/mac/gn"
     rm "tools/mac/gn-mac.zip"
 fi
@@ -48,5 +48,5 @@ fi
 
 # Copy the .gclient file
 cp -f "$GFILE" "$WEBRTC_SRC/.gclient"
-cd webrtc
+cd $WEBRTC_SRC
 gclient sync --no-history

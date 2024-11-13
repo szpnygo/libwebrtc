@@ -1,9 +1,18 @@
 @echo off
 setlocal
 set "ROOT=%CD%"
-set "GFILE=%CD%\tools\config\win.gclient"
+set "GFILE=%CD%\tools\config\win\.gclient"
 set "NO_AUTH_BOTO_CONFIG=%CD%\tools\config\win\.boto"
 set "DEPOT_TOOLS_WIN_TOOLCHAIN=0"
+
+REM Check if Git is available
+where /q git || (echo Git is not installed. Please install Git. && exit /b)
+
+REM Check if Python is available
+where /q python || (echo Python is not installed. Please install Python. && exit /b)
+
+REM Check if pip is available
+where /q pip || (echo pip is not installed. Please install pip. && exit /b)
 
 REM Check if the directory 'tools\gclient' exists
 if not exist "tools\gclient" (
@@ -45,4 +54,4 @@ if not exist "webrtc" (
 
 copy /Y "%GFILE%" "webrtc\.gclient"
 cd webrtc
-gclient sync --no-history
+gclient sync

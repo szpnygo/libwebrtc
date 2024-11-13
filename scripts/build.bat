@@ -3,7 +3,7 @@ setlocal
 set "PATH=%CD%\tools\gclient;%PATH%"
 set "PATH=%CD%\tools\gn;%PATH%"
 set "PATH=%CD%\tools\ninja;%PATH%"
-set "GFILE=%CD%\tools\config\win.gclient"
+set "GFILE=%CD%\tools\config\win\.gclient"
 set "ROOT=%CD%"
 set "LIBWEBRTC=%CD%\libwebrtc"
 set "GNFILE=%CD%\BUILD.gn"
@@ -23,7 +23,7 @@ set GYP_MSVS_VERSION=2022
 set GYP_GENERATORS=ninja,msvs-ninja
 set GYP_MSVS_OVERRIDE_PATH=C:\Program Files\Microsoft Visual Studio\2022\Community
 cd webrtc\src
-gn gen "out/win-%ARCH%" --args="target_os=\"win\" target_cpu=\"%ARCH%\" is_debug=false is_clang=true rtc_include_tests=false rtc_use_h264=true ffmpeg_branding=\"Chrome\" is_component_build=false use_rtti=true rtc_enable_protobuf=false rtc_include_tests=false rtc_build_examples=false libwebrtc_desktop_capture=true" --ide=vs2022
+gn gen "out/win-%ARCH%" --args="target_os=\"win\" target_cpu=\"%ARCH%\" is_debug=false is_clang=true use_custom_libcxx=false enable_iterator_debugging=true rtc_include_tests=false rtc_use_h264=true ffmpeg_branding=\"Chrome\" is_component_build=false use_rtti=true rtc_enable_protobuf=false rtc_include_tests=false rtc_build_examples=false libwebrtc_desktop_capture=true" --ide=vs2022
 ninja -C "out/win-%ARCH%"
 
 cd "%ROOT%"

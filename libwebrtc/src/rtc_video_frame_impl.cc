@@ -164,51 +164,45 @@ scoped_refptr<RTCVideoFrame> RTCVideoFrame::Create(Type type, int width,
   rtc::scoped_refptr<webrtc::I420Buffer> i420_buffer =
       webrtc::I420Buffer::Create(width, height);
 
-  // 创建空的Y、U、V通道
-  std::unique_ptr<uint8_t[]> y_plane(new uint8_t[width * height]);
-  std::unique_ptr<uint8_t[]> u_plane(
-      new uint8_t[(width + 1) / 2 * (height + 1) / 2]);
-  std::unique_ptr<uint8_t[]> v_plane(
-      new uint8_t[(width + 1) / 2 * (height + 1) / 2]);
-
   switch (type) {
+    case libwebrtc::RTCVideoFrame::Type::kABGR:
+      libyuv::ABGRToI420(buffer, stride, i420_buffer->MutableDataY(),
+                         i420_buffer->StrideY(), i420_buffer->MutableDataU(),
+                         i420_buffer->StrideU(), i420_buffer->MutableDataV(),
+                         i420_buffer->StrideV(), width, height);
+      break;
     case libwebrtc::RTCVideoFrame::Type::kARGB:
-      libyuv::ARGBToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
-                         (width + 1) / 2, v_plane.get(), (width + 1) / 2, width,
-                         height);
+      libyuv::ARGBToI420(buffer, stride, i420_buffer->MutableDataY(),
+                         i420_buffer->StrideY(), i420_buffer->MutableDataU(),
+                         i420_buffer->StrideU(), i420_buffer->MutableDataV(),
+                         i420_buffer->StrideV(), width, height);
       break;
     case libwebrtc::RTCVideoFrame::Type::kBGRA:
-      libyuv::BGRAToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
-                         (width + 1) / 2, v_plane.get(), (width + 1) / 2, width,
-                         height);
-      break;
-    case libwebrtc::RTCVideoFrame::Type::kABGR:
-      libyuv::ABGRToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
-                         (width + 1) / 2, v_plane.get(), (width + 1) / 2, width,
-                         height);
+      libyuv::BGRAToI420(buffer, stride, i420_buffer->MutableDataY(),
+                         i420_buffer->StrideY(), i420_buffer->MutableDataU(),
+                         i420_buffer->StrideU(), i420_buffer->MutableDataV(),
+                         i420_buffer->StrideV(), width, height);
       break;
     case libwebrtc::RTCVideoFrame::Type::kRGBA:
-      libyuv::RGBAToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
-                         (width + 1) / 2, v_plane.get(), (width + 1) / 2, width,
-                         height);
+      libyuv::RGBAToI420(buffer, stride, i420_buffer->MutableDataY(),
+                         i420_buffer->StrideY(), i420_buffer->MutableDataU(),
+                         i420_buffer->StrideU(), i420_buffer->MutableDataV(),
+                         i420_buffer->StrideV(), width, height);
       break;
     case libwebrtc::RTCVideoFrame::Type::kRGB24:
-      libyuv::RGB24ToI420(buffer, stride, y_plane.get(), width, u_plane.get(),
-                          (width + 1) / 2, v_plane.get(), (width + 1) / 2,
-                          width, height);
+      libyuv::RGB24ToI420(buffer, stride, i420_buffer->MutableDataY(),
+                          i420_buffer->StrideY(), i420_buffer->MutableDataU(),
+                          i420_buffer->StrideU(), i420_buffer->MutableDataV(),
+                          i420_buffer->StrideV(), width, height);
       break;
     default:
       break;
   }
 
-  auto newBuffer =
-      i420_buffer->Copy(width, height, y_plane.get(), width, u_plane.get(),
-                        (width + 1) / 2, v_plane.get(), (width + 1) / 2);
-
   // 创建RTCVideoFrame对象
   scoped_refptr<VideoFrameBufferImpl> frame =
       scoped_refptr<VideoFrameBufferImpl>(
-          new RefCountedObject<VideoFrameBufferImpl>(newBuffer));
+          new RefCountedObject<VideoFrameBufferImpl>(i420_buffer));
 
   return frame;
 }

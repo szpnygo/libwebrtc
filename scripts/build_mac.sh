@@ -21,7 +21,7 @@ cp $GFILE $WEBRTC_SRC/.gclient
 export DEPOT_TOOLS_WIN_TOOLCHAIN=0
 export ARCH=arm64
 cd $WEBRTC_SRC/src
-gn gen out/mac-$ARCH --args="target_os=\"mac\" target_cpu=\"$ARCH\" is_debug=false rtc_enable_google_benchmarks=false rtc_include_tests=false rtc_use_h264=true ffmpeg_branding=\"Chrome\" is_component_build=false use_rtti=true use_custom_libcxx=false rtc_enable_protobuf=false rtc_include_tests=false rtc_build_examples=false libwebrtc_desktop_capture=true mac_deployment_target=\"10.14\"" 
+gn gen out/mac-$ARCH --args="target_os=\"mac\" target_cpu=\"$ARCH\" use_thin_lto=true is_debug=false rtc_enable_google_benchmarks=false rtc_include_tests=false rtc_use_h264=true ffmpeg_branding=\"Chrome\" is_component_build=false use_rtti=true use_custom_libcxx=false rtc_enable_protobuf=false rtc_include_tests=false rtc_build_examples=false libwebrtc_desktop_capture=true mac_deployment_target=\"10.14\"" 
 ninja -C out/mac-$ARCH
 
 cd $ROOT
